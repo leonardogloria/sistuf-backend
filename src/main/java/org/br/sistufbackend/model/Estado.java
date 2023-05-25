@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor@Builder@NoArgsConstructor
 @Entity
 public class Estado {
-    @Id@GeneratedValue(strategy= GenerationType.SEQUENCE)
-    private Long id;
-    @Column(length = 2,unique = true)
+    @Id
     private String uf;
     private String nome;
 }

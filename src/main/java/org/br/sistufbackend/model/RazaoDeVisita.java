@@ -13,9 +13,11 @@ public class RazaoDeVisita {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Long id;
+    @Column(name = "rotulo")
     private String rotulo;
+    @Column(name = "regra")
     private RegraDeCobrancaTUF regraDeCobrancaTUF;
     @ManyToOne
-    @JoinColumn(name = "categoria_visita_id")
+    @JoinColumn(name = "categoria_visita_idcategoria_visita")
     private CategoriaVisita categoriaVisita;
 }

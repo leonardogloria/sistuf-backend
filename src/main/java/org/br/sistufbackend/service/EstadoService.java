@@ -7,9 +7,11 @@ import java.util.Optional;
 
 public interface EstadoService {
     Estado save(Estado estado);
-    Optional<Estado> getById(Long id);
-    void deleteById(Long id);
+    Optional<Estado> getById(String id);
+    void deleteById(String id);
+    List<Estado> findAllByName(String name);
+
     List<Estado> getAll();
-    void update(Long id, Estado estado);
+    void update(String id, Estado estado);
 
 }

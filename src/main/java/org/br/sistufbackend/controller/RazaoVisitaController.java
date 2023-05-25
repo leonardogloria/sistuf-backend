@@ -14,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/razaoVisita")
+@CrossOrigin(origins = "*")
 public class RazaoVisitaController {
     @Autowired
     RazaoDeVisitaService razaoDeVisitaService;
@@ -41,7 +42,7 @@ public class RazaoVisitaController {
         razaoDeVisitaService.deleteById(id);
         return ResponseEntity.ok(Map.of("Mensagem", "Deletado com sucesso"));
     }
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable  Long id,@RequestBody RazaoDeVisita razaoDeVisita){
         razaoDeVisitaService.update(id,razaoDeVisita);
         return ResponseEntity.ok(Map.of("Mensagem", "Atualizado Com sucesso"));

@@ -12,10 +12,12 @@ import org.br.sistufbackend.model.enums.RegraDeCobrancaTUF;
 public class TipoNavio {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @Column(name = "idtipo_navio")
     private Long id;
+    @Column(name = "nome")
     private String tipoDeNavio;
     private RegraDeCobrancaTUF regraDeCobrancaTUF;
     @ManyToOne
-    @JoinColumn(name = "categoria_visita_id")
+    @JoinColumn(name = "categoria_visita_idcategoria_visita")
     private CategoriaVisita categoriaVisita;
 }

@@ -12,6 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/estado")
+@CrossOrigin(origins = "*")
 public class EstadoController {
     @Autowired
     EstadoService estadoService;
@@ -21,11 +22,14 @@ public class EstadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
     @GetMapping
-    public ResponseEntity getAll(){
+    public ResponseEntity getAll(@RequestParam(required = false)  String nome){
+        if(nome != null && !nome.isEmpty()){
+            return ResponseEntity.ok(estadoService.findAllByName(nome));
+        }
         return ResponseEntity.ok(estadoService.getAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable Long id){
+    public ResponseEntity getById(@PathVariable String id){
         try{
             Estado byId = estadoService.getById(id).orElseThrow(EntityNotFoundException::new);
             return ResponseEntity.ok(byId);
@@ -34,14 +38,13 @@ public class EstadoController {
         }
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteById(@PathVariable Long id){
+    public ResponseEntity deleteById(@PathVariable String id){
         estadoService.deleteById(id);
         return ResponseEntity.ok(Map.of("Mensage", "Sucesso"));
     }
-    @PostMapping("/{id}")
-    public ResponseEntity updateById(@PathVariable Long id, @RequestBody Estado estado){
+    @PutMapping("/{id}")
+    public ResponseEntity updateById(@PathVariable String id, @RequestBody Estado estado){
         estadoService.update(id, estado);
         return ResponseEntity.ok(Map.of("Mensage", "Sucesso"));
-
     }
 }

@@ -1,9 +1,6 @@
 package org.br.sistufbackend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,10 +13,16 @@ import java.time.LocalDate;
 public class CategoriaVisita {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @Column(name = "idcategoria_visita")
     private Long id;
+    @Column(name = "desc_detalhada")
     private String descricaoDetalhada;
+    @Column(name = "desc_lei")
     private String descricaoLei;
+    @Column(name = "desc_abreviada")
     private String descricaoAbreviada;
+    @Column(name = "data_inicio_vigencia")
     private LocalDate inicioVigencia;
+    @Column(name = "data_termino_vigencia")
     private LocalDate terminoVigencia;
 }

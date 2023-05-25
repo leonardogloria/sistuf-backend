@@ -4,6 +4,7 @@ import org.br.sistufbackend.model.Pais;
 import org.br.sistufbackend.repository.PaisRepository;
 import org.br.sistufbackend.service.PaisService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +15,9 @@ public class PaisServiceImpl implements PaisService {
     @Autowired
     PaisRepository paisRepository;
     @Override
-    public List<Pais> getAll() {
-        return paisRepository.findAll();
+    public List<Pais> getAll(Integer pageSize) {
+        Pageable page = Pageable.ofSize(pageSize);
+        return paisRepository.findAll(page).get().toList();
     }
 
     @Override

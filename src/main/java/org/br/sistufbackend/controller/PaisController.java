@@ -13,6 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/pais")
+@CrossOrigin(origins = "*")
 public class PaisController {
     @Autowired
     PaisService paisService;
@@ -32,12 +33,13 @@ public class PaisController {
 
     }
     @GetMapping
-    public ResponseEntity getAll(@RequestParam(required = false)  String nome){
+    public ResponseEntity getAll(@RequestParam(required = false)  String nome,
+                                 @RequestParam(required = false, defaultValue = "10") Integer size){
         List<Pais> paises;
         if(nome != null && !nome.isEmpty()){
             paises = paisService.findAllByNome(nome);
         }else {
-            paises = paisService.getAll();
+            paises = paisService.getAll(size);
         }
         return ResponseEntity.ok(paises);
     }
@@ -46,7 +48,7 @@ public class PaisController {
         paisService.deleteById(id);
         return ResponseEntity.ok(Map.of("Mensagem", "Deletado com sucesso"));
     }
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable  Long id,@RequestBody Pais pais){
         paisService.update(id,pais);
         return ResponseEntity.ok(Map.of("Mensagem", "Atualizado Com sucesso"));

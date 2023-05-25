@@ -13,6 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/tipoNavio")
+@CrossOrigin(origins = "*")
 public class TipoNavioController {
     @Autowired
     TipoNavioService navioService;
@@ -40,7 +41,7 @@ public class TipoNavioController {
         navioService.deleteById(id);
         return ResponseEntity.ok(Map.of("Mensagem", "Deletado com sucesso"));
     }
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable  Long id,@RequestBody TipoNavio navio){
         navioService.update(id, navio);
         return ResponseEntity.ok(Map.of("Mensagem", "Atualizado Com sucesso"));

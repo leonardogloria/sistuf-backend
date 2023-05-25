@@ -20,13 +20,18 @@ public class EstadoServiceImpl implements EstadoService {
     }
 
     @Override
-    public Optional<Estado> getById(Long id) {
+    public Optional<Estado> getById(String id) {
         return estadoRepository.findById(id);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         estadoRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Estado> findAllByName(String name) {
+        return estadoRepository.findAllByNomeContainsIgnoreCase(name);
     }
 
     @Override
@@ -35,7 +40,7 @@ public class EstadoServiceImpl implements EstadoService {
     }
 
     @Override
-    public void update(Long id, Estado estado) {
+    public void update(String id, Estado estado) {
         Estado estadoExistente = estadoRepository.findById(id).get();
         estadoExistente.setUf(estado.getUf());
         estadoExistente.setNome(estado.getNome());
