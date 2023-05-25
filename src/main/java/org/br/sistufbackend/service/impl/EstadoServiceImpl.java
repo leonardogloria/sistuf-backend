@@ -4,6 +4,8 @@ import org.br.sistufbackend.model.Estado;
 import org.br.sistufbackend.repository.EstadoRepository;
 import org.br.sistufbackend.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +38,14 @@ public class EstadoServiceImpl implements EstadoService {
 
     @Override
     public List<Estado> getAll() {
-        return estadoRepository.findAll();
+        return getAll(10);
+    }
+
+    @Override
+    public List<Estado> getAll(Integer pageSize) {
+        Pageable page = Pageable.ofSize(pageSize);
+        return estadoRepository.findAll(page).get().toList();
+
     }
 
     @Override
@@ -45,5 +54,16 @@ public class EstadoServiceImpl implements EstadoService {
         estadoExistente.setUf(estado.getUf());
         estadoExistente.setNome(estado.getNome());
         estadoRepository.save(estadoExistente);
+    }
+
+    @Override
+    public List<Estado> getAll(Integer size, Integer page) {
+        PageRequest of = PageRequest.of(page, size);
+        return estadoRepository.findAll(of).get().toList();
+    }
+
+    @Override
+    public Long count() {
+        return estadoRepository.count();
     }
 }

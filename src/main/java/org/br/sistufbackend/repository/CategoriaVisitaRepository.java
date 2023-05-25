@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface CategoriaVisitaRepository extends JpaRepository<CategoriaVisita,Long>, PagingAndSortingRepository<CategoriaVisita,Long> {
     List<CategoriaVisita> findAllByDescricaoDetalhadaContainsIgnoreCase(String criteria, Pageable size);
+
 }

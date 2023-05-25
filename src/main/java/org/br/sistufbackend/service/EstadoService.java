@@ -12,6 +12,10 @@ public interface EstadoService {
     List<Estado> findAllByName(String name);
 
     List<Estado> getAll();
+    List<Estado> getAll(Integer pageSize);
     void update(String id, Estado estado);
+
+    List<Estado> getAll(Integer size, Integer page);
+    Long count();
 
 }

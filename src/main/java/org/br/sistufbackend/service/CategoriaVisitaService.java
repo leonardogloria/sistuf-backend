@@ -10,8 +10,8 @@ public interface CategoriaVisitaService {
     CategoriaVisita save(CategoriaVisita categoriaVisita);
     Optional<CategoriaVisita> getById(Long id);
     void deleteById(Long id);
-    List<CategoriaVisita> getAll(Integer pagesize);
+    List<CategoriaVisita> getAll(Integer pagesize, Integer page);
     void update(Long id,CategoriaVisita categoriaVisita);
     List<CategoriaVisita> findByDescricaoDetalhada(String descricao, Integer size);
-
+    Long count();
 }

@@ -5,6 +5,7 @@ import org.br.sistufbackend.model.CategoriaVisita;
 import org.br.sistufbackend.repository.CategoriaVisitaRepository;
 import org.br.sistufbackend.service.CategoriaVisitaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +32,9 @@ public class CategoriaVisitaServiceImpl implements CategoriaVisitaService {
     }
 
     @Override
-    public List<CategoriaVisita> getAll(Integer pagesize) {
-        Pageable pageable = Pageable.ofSize(pagesize);
-        return categoriaVisitaRepository.findAll(pageable).stream().toList();
+    public List<CategoriaVisita> getAll(Integer pagesize, Integer page) {
+        PageRequest of = PageRequest.of(page, pagesize);
+        return categoriaVisitaRepository.findAll(of).stream().toList();
     }
 
     @Override
@@ -45,6 +46,7 @@ public class CategoriaVisitaServiceImpl implements CategoriaVisitaService {
         categoriaVisitaRetornada.setInicioVigencia(categoriaVisita.getInicioVigencia());
         categoriaVisitaRetornada.setTerminoVigencia(categoriaVisita.getTerminoVigencia());
         categoriaVisitaRepository.save(categoriaVisitaRetornada);
+
     }
 
     @Override
@@ -52,4 +54,10 @@ public class CategoriaVisitaServiceImpl implements CategoriaVisitaService {
         Pageable pageable = Pageable.ofSize(size);
         return categoriaVisitaRepository.findAllByDescricaoDetalhadaContainsIgnoreCase(descricao,pageable);
     }
+
+    @Override
+    public Long count() {
+        return categoriaVisitaRepository.count();
+    }
+
 }

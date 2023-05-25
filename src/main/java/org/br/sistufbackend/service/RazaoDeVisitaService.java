@@ -11,5 +11,8 @@ public interface RazaoDeVisitaService {
     Optional<RazaoDeVisita> getById(Long id);
     void deleteById(Long id);
     void update(Long id, RazaoDeVisita razaoDeVisita);
+    long count();
+    List<RazaoDeVisita> getAll(int pageSize, int page);
+    List<RazaoDeVisita> findAllByRotulo(String rotulo);
 
 }

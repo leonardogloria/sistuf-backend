@@ -4,6 +4,7 @@ import org.br.sistufbackend.model.TipoNavio;
 import org.br.sistufbackend.repository.TipoNavioRepository;
 import org.br.sistufbackend.service.TipoNavioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,5 +41,21 @@ public class TipoNavioServiceImpl implements TipoNavioService {
         localizado.setCategoriaVisita(navio.getCategoriaVisita());
         localizado.setRegraDeCobrancaTUF(navio.getRegraDeCobrancaTUF());
         navioRepository.save(localizado);
+    }
+
+    @Override
+    public Long count() {
+        return navioRepository.count();
+    }
+
+    @Override
+    public List<TipoNavio> getAll(int pageSize, int page) {
+        PageRequest of = PageRequest.of(page,pageSize);
+        return navioRepository.findAll(of).stream().toList();
+    }
+
+    @Override
+    public List<TipoNavio> findAllByNome(String nome) {
+        return navioRepository.findAllByTipoDeNavioContainsIgnoreCase(nome);
     }
 }

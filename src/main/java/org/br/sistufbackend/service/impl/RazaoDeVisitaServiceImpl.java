@@ -4,6 +4,7 @@ import org.br.sistufbackend.model.RazaoDeVisita;
 import org.br.sistufbackend.repository.RazaoDeVisitaRepository;
 import org.br.sistufbackend.service.RazaoDeVisitaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,5 +40,22 @@ public class RazaoDeVisitaServiceImpl implements RazaoDeVisitaService {
         razaoLocalizado.setRotulo(razaoDeVisita.getRotulo());
         razaoLocalizado.setRegraDeCobrancaTUF(razaoDeVisita.getRegraDeCobrancaTUF());
         razaoDeVisitaRepository.save(razaoLocalizado);
+    }
+
+    @Override
+    public long count() {
+        return razaoDeVisitaRepository.count();
+    }
+
+    @Override
+    public List<RazaoDeVisita> getAll(int pageSize, int page) {
+        PageRequest of = PageRequest.of(page,pageSize);
+        return razaoDeVisitaRepository.findAll(of).stream().toList();
+
+    }
+
+    @Override
+    public List<RazaoDeVisita> findAllByRotulo(String rotulo) {
+        return razaoDeVisitaRepository.findAllByRotuloContainsIgnoreCase(rotulo);
     }
 }

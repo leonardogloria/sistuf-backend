@@ -9,6 +9,7 @@ import org.br.sistufbackend.model.enums.RegraDeCobrancaTUF;
 
 @Entity
 @Data@AllArgsConstructor@NoArgsConstructor@Builder
+@Table(name = "tipo_navio")
 public class TipoNavio {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
@@ -16,6 +17,7 @@ public class TipoNavio {
     private Long id;
     @Column(name = "nome")
     private String tipoDeNavio;
+    @Column(name = "regra")
     private RegraDeCobrancaTUF regraDeCobrancaTUF;
     @ManyToOne
     @JoinColumn(name = "categoria_visita_idcategoria_visita")

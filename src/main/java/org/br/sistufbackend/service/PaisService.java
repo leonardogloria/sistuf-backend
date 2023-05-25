@@ -12,4 +12,7 @@ public interface PaisService {
     Pais save(Pais pais);
     List<Pais> findAllByNome(String nome);
     void update(Long id, Pais pais);
+    Long count();
+
+    List<Pais> getAll(Integer size, Integer page);
 }

@@ -4,6 +4,7 @@ import org.br.sistufbackend.model.Pais;
 import org.br.sistufbackend.repository.PaisRepository;
 import org.br.sistufbackend.service.PaisService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -48,5 +49,16 @@ public class PaisServiceImpl implements PaisService {
         paisLocalizado.setCodigoDDI(pais.getCodigoDDI());
         paisLocalizado.setAcordoComBrasil(pais.isAcordoComBrasil());
         paisRepository.save(paisLocalizado);
+    }
+
+    @Override
+    public Long count() {
+        return paisRepository.count();
+    }
+
+    @Override
+    public List<Pais> getAll(Integer size, Integer page) {
+        PageRequest of = PageRequest.of(page, size);
+        return paisRepository.findAll(of).stream().toList();
     }
 }

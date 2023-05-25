@@ -9,9 +9,11 @@ import org.br.sistufbackend.model.enums.RegraDeCobrancaTUF;
 
 @Entity
 @Data@AllArgsConstructor@NoArgsConstructor@Builder
+@Table(name = "razao_visita")
 public class RazaoDeVisita {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @Column(name = "idrazao_visita")
     private Long id;
     @Column(name = "rotulo")
     private String rotulo;

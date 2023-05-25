@@ -11,4 +11,8 @@ public interface TipoNavioService {
     void deleteById(Long id);
     List<TipoNavio> getAll();
     void update(Long id, TipoNavio navio);
+    Long count();
+    List<TipoNavio> getAll(int pageSize, int page);
+
+    List<TipoNavio> findAllByNome(String nome);
 }

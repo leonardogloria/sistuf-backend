@@ -4,10 +4,13 @@ import jakarta.persistence.EntityNotFoundException;
 import org.br.sistufbackend.model.Estado;
 import org.br.sistufbackend.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @RestController
@@ -22,11 +25,20 @@ public class EstadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
     @GetMapping
-    public ResponseEntity getAll(@RequestParam(required = false)  String nome){
+    public ResponseEntity getAll(@RequestParam(required = false)  String nome,
+                                 @RequestParam(required = false, defaultValue = "10") Integer size,
+                                 @RequestParam(required = false, defaultValue = "0") Integer page){
+        Long count = estadoService.count();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        headers.add("total-size",count.toString());
+        httpHeaders.set("total-size",count.toString());
+        httpHeaders.setAccessControlExposeHeaders(Arrays.asList("*"));
+
         if(nome != null && !nome.isEmpty()){
             return ResponseEntity.ok(estadoService.findAllByName(nome));
         }
-        return ResponseEntity.ok(estadoService.getAll());
+        return ResponseEntity.ok().headers(httpHeaders).body(estadoService.getAll(size,page));
     }
     @GetMapping("/{id}")
     public ResponseEntity getById(@PathVariable String id){

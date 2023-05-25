@@ -1,13 +1,13 @@
 spring:
   datasource:
-    password: 123456
+    password: sistuf_marinha
     username: postgres
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:9000/postgres
   jpa:
     database: postgresql
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 server:
   port: 9009
