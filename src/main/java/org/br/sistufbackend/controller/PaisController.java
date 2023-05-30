@@ -35,6 +35,11 @@ public class PaisController {
         }
 
     }
+    @GetMapping("/all")
+    public ResponseEntity getAll(){
+        List<Pais> all = paisService.getAll();
+        return ResponseEntity.ok(all);
+    }
     @GetMapping
     public ResponseEntity getAll(@RequestParam(required = false)  String nome,
                                  @RequestParam(required = false, defaultValue = "10") Integer size,

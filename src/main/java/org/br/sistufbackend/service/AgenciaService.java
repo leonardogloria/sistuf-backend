@@ -12,4 +12,8 @@ public interface AgenciaService {
     void deleteById(Long id);
     List<Agencia> getAll();
     void update(Long id,Agencia agencia);
+    Long count();
+    List<Agencia> findByNome(String nome);
+
+    List<Agencia> getAll(Integer size, Integer page);
 }

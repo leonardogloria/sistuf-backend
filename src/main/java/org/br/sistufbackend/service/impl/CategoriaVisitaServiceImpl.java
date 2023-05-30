@@ -60,4 +60,9 @@ public class CategoriaVisitaServiceImpl implements CategoriaVisitaService {
         return categoriaVisitaRepository.count();
     }
 
+    @Override
+    public List<CategoriaVisita> getAll() {
+        return categoriaVisitaRepository.findAll();
+    }
+
 }

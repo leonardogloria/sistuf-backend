@@ -24,6 +24,12 @@ import static org.springframework.http.ResponseEntity.ok;
 public class CategoriaVisitaController {
     @Autowired
     CategoriaVisitaService categoriaVisitaService;
+
+    @GetMapping("/all")
+    public ResponseEntity getAll(){
+        List<CategoriaVisita> all = categoriaVisitaService.getAll();
+        return ResponseEntity.ok(all);
+    }
     @PostMapping
     public ResponseEntity create(@RequestBody  CategoriaVisita categoriaVisita){
         CategoriaVisita saved = categoriaVisitaService.save(categoriaVisita);

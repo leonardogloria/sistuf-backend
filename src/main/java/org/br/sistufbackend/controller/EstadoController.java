@@ -11,6 +11,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,6 +24,11 @@ public class EstadoController {
     public ResponseEntity create(@RequestBody  Estado estado){
         Estado saved = estadoService.save(estado);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+    @GetMapping("/all")
+    public ResponseEntity getAll(){
+        List<Estado> all = estadoService.getAll();
+        return ResponseEntity.ok(all);
     }
     @GetMapping
     public ResponseEntity getAll(@RequestParam(required = false)  String nome,

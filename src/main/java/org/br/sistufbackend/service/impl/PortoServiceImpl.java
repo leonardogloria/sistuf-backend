@@ -4,6 +4,8 @@ import org.br.sistufbackend.model.Porto;
 import org.br.sistufbackend.repository.PortoRepository;
 import org.br.sistufbackend.service.PortoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,7 +41,7 @@ public class PortoServiceImpl implements PortoService {
         retornado.setNome(porto.getNome());
         retornado.setOrganizacaoMilitar(porto.getOrganizacaoMilitar());
         retornado.setPais(porto.getPais());
-        retornado.setCodigoONU(porto.getCodigoONU());
+        retornado.setCodigoUNE(porto.getCodigoUNE());
         retornado.setCodigoDPC(porto.getCodigoDPC());
         retornado.setCep(porto.getCep());
         retornado.setLogradouro(porto.getLogradouro());
@@ -48,6 +50,22 @@ public class PortoServiceImpl implements PortoService {
         retornado.setBairro(porto.getBairro());
         retornado.setCidade(porto.getCidade());
         retornado.setEstado(porto.getEstado());
+        retornado.setCoordenadasGps(porto.getCoordenadasGps());
         portoRepository.save(retornado);
+    }
+
+    @Override
+    public Long count() {
+        return portoRepository.count();
+    }
+
+    @Override
+    public List<Porto> findByName(String nome) {
+        return portoRepository.findAllByNomeContainsIgnoreCase(nome);
+    }
+    @Override
+    public List<Porto> getAll(Integer page, Integer size) {
+        PageRequest of = PageRequest.of(page,size, Sort.by("id").ascending());
+        return portoRepository.findAll(of).stream().toList();
     }
 }

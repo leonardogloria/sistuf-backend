@@ -3,9 +3,11 @@ package org.br.sistufbackend.controller;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.br.sistufbackend.model.Porto;
+import org.br.sistufbackend.service.HeaderService;
 import org.br.sistufbackend.service.PortoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +17,26 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/porto")
+@CrossOrigin(origins = "*")
 public class PortoController {
     @Autowired
     PortoService portoService;
+    @Autowired
+    HeaderService headerService;
     @GetMapping
-    public ResponseEntity getAll(){
-        List<Porto> all = portoService.getAll();
-        return ResponseEntity.ok(all);
+    public ResponseEntity getAll(@RequestParam(required = false)  String nome,
+                                 @RequestParam(required = false, defaultValue = "10") Integer size,
+                                 @RequestParam(required = false, defaultValue = "0") Integer page){
+
+        Long count = portoService.count();
+        HttpHeaders customHeaders = headerService.getCustomHeaders(Map.of("total-size", count.toString()));
+        List<Porto> all ;
+        if(nome != null && !nome.isEmpty()){
+            all = portoService.findByName(nome);
+        }else{
+            all = portoService.getAll(page,size);
+        }
+        return ResponseEntity.ok().headers(customHeaders).body(all);
     }
     @GetMapping("/{id}")
     public ResponseEntity getById(@PathVariable  Long id){
@@ -43,7 +58,7 @@ public class PortoController {
         return ResponseEntity.ok(Map.of("Mensagem", "Deletado com sucesso"));
 
     }
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable Long id, @RequestBody Porto porto){
         portoService.update(id,porto);
         return ResponseEntity.ok(Map.of("Mensagem", "Atualizado Com sucesso"));

@@ -4,6 +4,7 @@ import org.br.sistufbackend.model.Agencia;
 import org.br.sistufbackend.repository.AgenciaRepository;
 import org.br.sistufbackend.service.AgenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,5 +52,21 @@ public class AgenciaServiceImpl implements AgenciaService {
         retornada.setRamal(agencia.getRamal());
         retornada.setStatus(agencia.getStatus());
         agenciaRepository.save(retornada);
+    }
+
+    @Override
+    public Long count() {
+        return agenciaRepository.count();
+    }
+
+    @Override
+    public List<Agencia> findByNome(String nome) {
+        return agenciaRepository.findAllByNomeContainsIgnoreCase(nome);
+    }
+
+    @Override
+    public List<Agencia> getAll(Integer size, Integer page) {
+        PageRequest of = PageRequest.of(page, size);
+        return agenciaRepository.findAll(of).stream().toList();
     }
 }

@@ -15,4 +15,5 @@ public interface PaisService {
     Long count();
 
     List<Pais> getAll(Integer size, Integer page);
+    List<Pais> getAll();
 }

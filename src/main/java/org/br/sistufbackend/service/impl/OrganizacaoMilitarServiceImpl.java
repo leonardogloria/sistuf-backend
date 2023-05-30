@@ -4,6 +4,8 @@ import org.br.sistufbackend.model.OrganizacaoMilitar;
 import org.br.sistufbackend.repository.OrganizacaoMilitarRepositoty;
 import org.br.sistufbackend.service.OrganizacaoMilitarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +17,8 @@ public class OrganizacaoMilitarServiceImpl implements OrganizacaoMilitarService 
     OrganizacaoMilitarRepositoty omRepositoty;
     @Override
     public List<OrganizacaoMilitar> getAll() {
-        return omRepositoty.findAll();
+        Sort sort = Sort.by("nome").ascending();
+        return omRepositoty.findAll(sort).stream().toList();
     }
 
     @Override
@@ -53,6 +56,22 @@ public class OrganizacaoMilitarServiceImpl implements OrganizacaoMilitarService 
         retornada.setCodigo(om.getCodigo());
         omRepositoty.save(retornada);
 
+    }
+
+    @Override
+    public Long count() {
+        return omRepositoty.count();
+    }
+
+    @Override
+    public List<OrganizacaoMilitar> findByNome(String nome) {
+        return omRepositoty.findAllByNomeContainsIgnoreCase(nome);
+    }
+
+    @Override
+    public List<OrganizacaoMilitar> getAll(Integer size, Integer page) {
+        PageRequest of = PageRequest.of(page, size);
+        return omRepositoty.findAll(of).stream().toList();
 
     }
 }

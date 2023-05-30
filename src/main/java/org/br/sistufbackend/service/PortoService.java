@@ -11,6 +11,8 @@ public interface PortoService {
     Optional<Porto> getById(Long id);
     void deleteById(Long id);
     Porto save(Porto porto);
-
     void update(Long id, Porto porto);
+    Long count();
+    List<Porto> findByName(String nome);
+    List<Porto> getAll(Integer page, Integer size);
 }

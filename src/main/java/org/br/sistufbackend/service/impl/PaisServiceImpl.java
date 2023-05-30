@@ -6,6 +6,7 @@ import org.br.sistufbackend.service.PaisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,5 +61,11 @@ public class PaisServiceImpl implements PaisService {
     public List<Pais> getAll(Integer size, Integer page) {
         PageRequest of = PageRequest.of(page, size);
         return paisRepository.findAll(of).stream().toList();
+    }
+
+    @Override
+    public List<Pais> getAll() {
+        Sort sort = Sort.by("nome").ascending();
+        return paisRepository.findAll(sort).stream().toList();
     }
 }

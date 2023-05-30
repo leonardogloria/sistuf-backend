@@ -6,6 +6,7 @@ import org.br.sistufbackend.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,7 +39,8 @@ public class EstadoServiceImpl implements EstadoService {
 
     @Override
     public List<Estado> getAll() {
-        return getAll(10);
+        Sort byNome = Sort.by("nome").ascending();
+        return estadoRepository.findAll(byNome);
     }
 
     @Override

@@ -14,4 +14,5 @@ public interface CategoriaVisitaService {
     void update(Long id,CategoriaVisita categoriaVisita);
     List<CategoriaVisita> findByDescricaoDetalhada(String descricao, Integer size);
     Long count();
+    List<CategoriaVisita> getAll();
 }
