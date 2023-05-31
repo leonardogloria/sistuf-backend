@@ -1,14 +1,11 @@
 spring:
-  profiles:
-    active: prod
   datasource:
-    password: sistuf_marinha
+    password: Marinha1!
     username: postgres
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:9000/postgres
+    url: jdbc:postgresql://bdmare.czwli4k1jtfe.us-east-1.rds.amazonaws.com:5432/bd_sistuf
   jpa:
     database: postgresql
-    show-sql: true
     hibernate:
       ddl-auto: none
 server:
