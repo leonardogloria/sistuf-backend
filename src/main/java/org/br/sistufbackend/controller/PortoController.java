@@ -3,6 +3,7 @@ package org.br.sistufbackend.controller;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.br.sistufbackend.model.Porto;
+import org.br.sistufbackend.model.dto.PortoDTO;
 import org.br.sistufbackend.service.HeaderService;
 import org.br.sistufbackend.service.PortoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,11 @@ public class PortoController {
     PortoService portoService;
     @Autowired
     HeaderService headerService;
+    @GetMapping("/all")
+    public ResponseEntity getAll(){
+        List<PortoDTO> all = portoService.getAll();
+        return ResponseEntity.ok(all);
+    }
     @GetMapping
     public ResponseEntity getAll(@RequestParam(required = false)  String nome,
                                  @RequestParam(required = false, defaultValue = "10") Integer size,

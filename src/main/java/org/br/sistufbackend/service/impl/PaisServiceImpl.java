@@ -4,6 +4,7 @@ import org.br.sistufbackend.model.Pais;
 import org.br.sistufbackend.repository.PaisRepository;
 import org.br.sistufbackend.service.PaisService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,7 +30,7 @@ public class PaisServiceImpl implements PaisService {
 
     @Override
     public void deleteById(Long id) {
-        paisRepository.deleteById(id);
+            paisRepository.deleteById(id);
     }
 
     @Override

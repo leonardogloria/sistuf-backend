@@ -1,6 +1,7 @@
 package org.br.sistufbackend.service.impl;
 
 import org.br.sistufbackend.model.Porto;
+import org.br.sistufbackend.model.dto.PortoDTO;
 import org.br.sistufbackend.repository.PortoRepository;
 import org.br.sistufbackend.service.PortoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ public class PortoServiceImpl implements PortoService {
     @Autowired
     PortoRepository portoRepository;
     @Override
-    public List<Porto> getAll() {
-        return portoRepository.findAll();
+    public List<PortoDTO> getAll() {
+        return portoRepository.findAllLazy();
     }
 
     @Override

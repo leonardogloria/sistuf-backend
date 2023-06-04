@@ -1,13 +1,13 @@
 package org.br.sistufbackend.service;
 
-import org.br.sistufbackend.model.Pais;
 import org.br.sistufbackend.model.Porto;
+import org.br.sistufbackend.model.dto.PortoDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PortoService {
-    List<Porto> getAll();
+    List<PortoDTO> getAll();
     Optional<Porto> getById(Long id);
     void deleteById(Long id);
     Porto save(Porto porto);

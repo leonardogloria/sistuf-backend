@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.br.sistufbackend.model.Pais;
 import org.br.sistufbackend.service.PaisService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,7 @@ public class PaisController {
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.add("total-size",count.toString());
         httpHeaders.set("total-size",count.toString());
-        httpHeaders.setAccessControlExposeHeaders(Arrays.asList("*"));
+        httpHeaders.setAccessControlExposeHeaders(List.of("*"));
         if(nome != null && !nome.isEmpty()){
             paises = paisService.findAllByNome(nome);
         }else {
@@ -61,8 +62,13 @@ public class PaisController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable  Long id){
-        paisService.deleteById(id);
-        return ResponseEntity.ok(Map.of("Mensagem", "Deletado com sucesso"));
+        try{
+            paisService.deleteById(id);
+            return ResponseEntity.ok(Map.of("Mensagem", "Deletado com sucesso"));
+        }catch (DataIntegrityViolationException ex){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("Mensagem",
+                    "Esse País esta sendo utilizado em algum recurso e não pode ser deletado."));
+        }
     }
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable  Long id,@RequestBody Pais pais){

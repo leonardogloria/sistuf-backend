@@ -25,6 +25,12 @@ public class TipoNavioController {
         TipoNavio saved = navioService.save(navio);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+    @GetMapping("/all")
+    public ResponseEntity getAll(){
+        List<TipoNavio> all = navioService.getAll();
+        return ResponseEntity.ok(all);
+    }
+
     @GetMapping
     public ResponseEntity findAll(@RequestParam(required = false)  String nome,
                                   @RequestParam(required = false, defaultValue = "10") Integer size,

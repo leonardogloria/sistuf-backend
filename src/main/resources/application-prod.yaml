@@ -1,10 +1,12 @@
 spring:
   datasource:
+    #password: Marinha1!
     password: ${DATABASE_PASS}
     username: postgres
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://bdmare.czwli4k1jtfe.us-east-1.rds.amazonaws.com:5432/bd_sistuf
   jpa:
+    show-sql: false
     database: postgresql
     hibernate:
       ddl-auto: none

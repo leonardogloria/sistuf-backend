@@ -1,9 +1,12 @@
 package org.br.sistufbackend.service.impl;
 
 import org.br.sistufbackend.model.Navio;
+import org.br.sistufbackend.model.dto.NavioDTO;
 import org.br.sistufbackend.repository.NavioRepository;
 import org.br.sistufbackend.service.NavioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,8 +32,8 @@ public class NavioServiceImpl implements NavioService {
     }
 
     @Override
-    public List<Navio> getAll() {
-        return navioRepository.findAll();
+    public List<NavioDTO> getAll() {
+        return navioRepository.findAllLazy();
     }
 
     @Override
@@ -48,5 +51,21 @@ public class NavioServiceImpl implements NavioService {
         retornado.setTelefone(navio.getTelefone());
         retornado.setPagaIndependenteReciprocidade(navio.getPagaIndependenteReciprocidade());
         navioRepository.save(retornado);
+    }
+
+    @Override
+    public Long count() {
+        return navioRepository.count();
+    }
+
+    @Override
+    public List<Navio> getAll(Integer page, Integer size) {
+        PageRequest pagindAndSorting = PageRequest.of(page,size, Sort.by("id").ascending());
+        return navioRepository.findAll(pagindAndSorting).stream().toList();
+    }
+
+    @Override
+    public List<Navio> findByName(String nome) {
+        return navioRepository.findAllByNomeContainsIgnoreCase(nome);
     }
 }
