@@ -27,5 +27,5 @@ public class Pais {
     @Column(name = "codigo_ddi")
     private String codigoDDI;
     @Column(name = "acordo")
-    private char acordoComBrasil;
+    private String acordoComBrasil;
 }
