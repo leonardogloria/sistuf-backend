@@ -12,7 +12,10 @@ import java.time.LocalDate;
 @Data@AllArgsConstructor@NoArgsConstructor@Builder
 public class CategoriaVisita {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    //
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="categoria_visita_sequence")
+    @SequenceGenerator(name="categoria_visita_sequence", sequenceName="categoria_visita_idcategoria_visita_seq",
+            allocationSize = 1)
     @Column(name = "idcategoria_visita")
     private Long id;
     @Column(name = "desc_detalhada")

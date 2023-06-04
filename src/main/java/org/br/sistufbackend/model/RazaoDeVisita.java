@@ -12,8 +12,10 @@ import org.br.sistufbackend.model.enums.RegraDeCobrancaTUF;
 @Table(name = "razao_visita")
 public class RazaoDeVisita {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     @Column(name = "idrazao_visita")
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="razao_visita_sequence")
+    @SequenceGenerator(name="razao_visita_sequence", sequenceName="razao_visita_idrazao_visita_seq",
+            allocationSize = 1)
     private Long id;
     @Column(name = "rotulo")
     private String rotulo;

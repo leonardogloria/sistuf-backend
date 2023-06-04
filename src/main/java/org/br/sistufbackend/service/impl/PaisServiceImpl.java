@@ -49,7 +49,7 @@ public class PaisServiceImpl implements PaisService {
         paisLocalizado.setNome(pais.getNome());
         paisLocalizado.setCodigoPaisAlpha3(pais.getCodigoPaisAlpha3());
         paisLocalizado.setCodigoDDI(pais.getCodigoDDI());
-        paisLocalizado.setAcordoComBrasil(pais.isAcordoComBrasil());
+        paisLocalizado.setAcordoComBrasil(pais.getAcordoComBrasil());
         paisRepository.save(paisLocalizado);
     }
 

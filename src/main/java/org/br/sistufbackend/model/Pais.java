@@ -9,9 +9,12 @@ import lombok.NoArgsConstructor;
 @Data@AllArgsConstructor@NoArgsConstructor@Builder
 @Entity
 public class Pais {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     @Column(name = "idpais")
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="pais_sequence")
+    @SequenceGenerator(name="pais_sequence", sequenceName="pais_idpais_seq",
+            allocationSize = 1)
     private Long id;
     @Column(name = "codigo_iso2")
     private String codigoPaisAlpha2;
@@ -24,5 +27,5 @@ public class Pais {
     @Column(name = "codigo_ddi")
     private String codigoDDI;
     @Column(name = "acordo")
-    private boolean acordoComBrasil;
+    private char acordoComBrasil;
 }
