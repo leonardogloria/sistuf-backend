@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.br.sistufbackend.model.Estado;
 import org.br.sistufbackend.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,8 +58,13 @@ public class EstadoController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable String id){
-        estadoService.deleteById(id);
-        return ResponseEntity.ok(Map.of("Mensage", "Sucesso"));
+        try{
+            estadoService.deleteById(id);
+            return ResponseEntity.ok(Map.of("Mensage", "Sucesso"));
+        }catch (DataIntegrityViolationException ex){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("Mensagem",
+                    "Esse Estado esta sendo utilizado em algum recurso e não pode ser deletado."));
+        }
     }
     @PutMapping("/{id}")
     public ResponseEntity updateById(@PathVariable String id, @RequestBody Estado estado){
