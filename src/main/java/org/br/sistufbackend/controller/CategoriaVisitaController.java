@@ -79,6 +79,7 @@ public class CategoriaVisitaController {
         }
 
     }
+
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable  Long id,@RequestBody CategoriaVisita categoriaVisita){
         categoriaVisitaService.update(id,categoriaVisita);
