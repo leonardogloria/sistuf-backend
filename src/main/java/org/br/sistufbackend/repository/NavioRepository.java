@@ -13,4 +13,6 @@ public interface NavioRepository  extends JpaRepository<Navio, Long> {
     @Query("SELECT new org.br.sistufbackend.model.dto.NavioDTO(n.id, n.nome) FROM Navio n ORDER BY n.nome ASC ")
     List<NavioDTO> findAllLazy();
 
+    boolean existsNavioByNumeroNavioIMO(String numeroImo);
+
 }

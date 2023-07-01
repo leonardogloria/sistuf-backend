@@ -1,5 +1,6 @@
 package org.br.sistufbackend.service.impl;
 
+import org.br.sistufbackend.exception.NavioValidationException;
 import org.br.sistufbackend.model.Navio;
 import org.br.sistufbackend.model.dto.NavioDTO;
 import org.br.sistufbackend.repository.NavioRepository;
@@ -18,6 +19,7 @@ public class NavioServiceImpl implements NavioService {
     NavioRepository navioRepository;
     @Override
     public Navio save(Navio navio) {
+        existisByImo(navio.getNumeroNavioIMO());
         return navioRepository.save(navio);
     }
 
@@ -38,6 +40,7 @@ public class NavioServiceImpl implements NavioService {
 
     @Override
     public void update(Long id, Navio navio) {
+        existisByImo(navio.getNumeroNavioIMO());
         Navio retornado = navioRepository.findById(id).get();
         retornado.setPais(navio.getPais());
         retornado.setTipoNavio(navio.getTipoNavio());
@@ -67,5 +70,12 @@ public class NavioServiceImpl implements NavioService {
     @Override
     public List<Navio> findByName(String nome) {
         return navioRepository.findAllByNomeContainsIgnoreCase(nome);
+    }
+
+    @Override
+    public void existisByImo(String numero) {
+        if(navioRepository.existsNavioByNumeroNavioIMO(numero)){
+            throw new NavioValidationException("Número IMO Já existe");
+        }
     }
 }

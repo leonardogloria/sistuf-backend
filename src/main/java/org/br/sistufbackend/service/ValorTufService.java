@@ -8,4 +8,6 @@ public interface ValorTufService {
     List<ValorTUF> getAll();
     Long count();
     ValorTUF create(ValorTUF valorTUF);
+    void deleteById(Long id);
+
 }

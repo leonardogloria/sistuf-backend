@@ -13,8 +13,7 @@ public interface NavioService {
     List<NavioDTO> getAll();
     void update(Long id, Navio navio);
     Long count();
-
     List<Navio> getAll(Integer page, Integer size);
-
     List<Navio> findByName(String nome);
+    void existisByImo(String numero);
 }

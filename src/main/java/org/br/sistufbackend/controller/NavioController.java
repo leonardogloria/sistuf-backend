@@ -1,6 +1,7 @@
 package org.br.sistufbackend.controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.br.sistufbackend.exception.NavioValidationException;
 import org.br.sistufbackend.model.Navio;
 import org.br.sistufbackend.model.dto.NavioDTO;
 import org.br.sistufbackend.service.HeaderService;
@@ -60,13 +61,22 @@ public class NavioController {
     }
     @PostMapping
     public ResponseEntity create(@RequestBody Navio navio){
-        Navio saved = navioService.save(navio);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        try{
+            Navio saved = navioService.save(navio);
+            return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        }catch (NavioValidationException ex){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("Mensagem",
+                    ex.getMessage()));
+        }
     }
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Long id, @RequestBody Navio navio){
-        navioService.update(id,navio);
-        return ResponseEntity.ok(Map.of("Mensagem", "Atualizado Com sucesso"));
-
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Navio navio){
+        try{
+            navioService.update(id,navio);
+            return ResponseEntity.ok(Map.of("Mensagem", "Atualizado Com sucesso"));
+        }catch (NavioValidationException ex){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("Mensagem",
+                    ex.getMessage()));
+        }
     }
 }
