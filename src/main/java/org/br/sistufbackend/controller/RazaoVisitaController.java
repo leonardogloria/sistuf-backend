@@ -2,6 +2,7 @@ package org.br.sistufbackend.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.coyote.Response;
+import org.br.sistufbackend.model.Agencia;
 import org.br.sistufbackend.model.RazaoDeVisita;
 import org.br.sistufbackend.service.RazaoDeVisitaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ import java.util.Map;
 public class RazaoVisitaController {
     @Autowired
     RazaoDeVisitaService razaoDeVisitaService;
+    @GetMapping("/all")
+    public ResponseEntity getAll(){
+        List<RazaoDeVisita> all = razaoDeVisitaService.getAll();
+        return ResponseEntity.ok(all);
+    }
     @PostMapping
     public ResponseEntity create(@RequestBody RazaoDeVisita razaoDeVisita){
         RazaoDeVisita saved = razaoDeVisitaService.create(razaoDeVisita);

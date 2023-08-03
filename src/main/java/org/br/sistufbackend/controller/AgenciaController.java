@@ -2,6 +2,7 @@ package org.br.sistufbackend.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.br.sistufbackend.model.Agencia;
+import org.br.sistufbackend.model.CategoriaVisita;
 import org.br.sistufbackend.service.AgenciaService;
 import org.br.sistufbackend.service.HeaderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,11 @@ public class AgenciaController {
     AgenciaService agenciaService;
     @Autowired
     HeaderService headerService;
+    @GetMapping("/all")
+    public ResponseEntity getAll(){
+        List<Agencia> all = agenciaService.getAll();
+        return ResponseEntity.ok(all);
+    }
     @GetMapping
     public ResponseEntity getAll(@RequestParam(required = false)  String nome,
                                  @RequestParam(required = false, defaultValue = "10") Integer size,
