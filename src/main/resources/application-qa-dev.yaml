@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    password: Marinha1!
+    username: postgres
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://bdmare.czwli4k1jtfe.us-east-1.rds.amazonaws.com:5432/bd_sistuf
+  jpa:
+    show-sql: true
+    database: postgresql
+    hibernate:
+      ddl-auto: none
+server:
+  port: 9009

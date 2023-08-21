@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    password: postgres
+    username: postgres
+    url: jdbc:postgresql://localhost:5433/bd_sistuf
+  jpa:
+    format-sql: true
+    hibernate:
+      ddl-auto: update
+  http:
+    log-request-details: true
+
+logging:
+  level:
+    org:
+      springframework:
+        web: TRACE
