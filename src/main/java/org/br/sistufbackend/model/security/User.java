@@ -29,6 +29,7 @@ public class User implements UserDetails {
     @Column(name = "activation_code")
     private String activationCode;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "priv_admin")
     private YesNo privAdmin;
 
@@ -41,8 +42,8 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "sec_users_groups",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id")
+            joinColumns = @JoinColumn(name = "login", referencedColumnName = "login"),
+            inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "group_id")
     )
     private List<UserGroup> userGroups;
 

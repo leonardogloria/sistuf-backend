@@ -3,6 +3,7 @@ package org.br.sistufbackend.security;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class AuthEntryPoint extends BasicAuthenticationEntryPoint {
     public void commence(
             HttpServletRequest request, HttpServletResponse response, AuthenticationException authEx)
             throws IOException {
-        response.addHeader("WWW-Authenticate", "Basic realm=\"" + getRealmName() + "\"");
+        SecurityContextHolder.clearContext();
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         PrintWriter writer = response.getWriter();
         writer.println("HTTP Status 401 - " + authEx.getMessage());
@@ -24,7 +25,7 @@ public class AuthEntryPoint extends BasicAuthenticationEntryPoint {
 
     @Override
     public void afterPropertiesSet() {
-        setRealmName("Baeldung");
+        setRealmName("Sistuf");
         super.afterPropertiesSet();
     }
 }
