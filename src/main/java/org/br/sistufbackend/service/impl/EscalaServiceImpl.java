@@ -6,6 +6,7 @@ import org.br.sistufbackend.service.EscalaService;
 import org.br.sistufbackend.service.ValidarEscalaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class EscalaServiceImpl implements EscalaService {
     @Override
     public Escala save(Escala escala) {
         validarEscalaService.validarDataSaida(escala);
-        validarEscalaService.validarQuantidadeDePertos(escala, getAllByRoteiroId(escala.getRoteiro().getId()));
+        validarEscalaService.validarQuantidadeDePortos(escala, getAllByRoteiroId(escala.getRoteiro().getId()));
         validarEscalaService.validarRangeDeDatas(escala);
 
         return escalaRepository.save(escala);
@@ -34,6 +35,8 @@ public class EscalaServiceImpl implements EscalaService {
 
     @Override
     public void deleteById(Long id) {
+        Escala escala = getById(id).get();
+        validarEscalaService.validarSeEhUltimaEscala(escala, getAllByRoteiroId(escala.getRoteiro().getId()));
         escalaRepository.deleteById(id);
     }
     @Override
@@ -59,6 +62,7 @@ public class EscalaServiceImpl implements EscalaService {
 
     @Override
     public List<Escala> getAllByRoteiroId(Long id) {
-        return escalaRepository.findAllByRoteiroId(id);
+        Sort order = Sort.by(Sort.Direction.DESC, "saida");
+        return escalaRepository.findAllByRoteiroId(id,order);
     }
 }

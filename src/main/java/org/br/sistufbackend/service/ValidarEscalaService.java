@@ -2,8 +2,6 @@ package org.br.sistufbackend.service;
 
 import org.br.sistufbackend.model.Escala;
 import org.br.sistufbackend.model.Roteiro;
-import org.br.sistufbackend.service.EscalaService;
-import org.br.sistufbackend.service.RoteiroService;
 import org.br.sistufbackend.validation.exception.EscalaValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,13 +37,22 @@ public class ValidarEscalaService {
     private boolean isDataSaidaForaDoPeriodo(Escala escala, Roteiro roteiro){
         return escala.getSaida().isBefore(roteiro.getEntrada()) || escala.getSaida().isAfter(roteiro.getSaida());
     }
-    public void validarQuantidadeDePertos(Escala escala, List<Escala> escalas) {
+    public void validarQuantidadeDePortos(Escala escala, List<Escala> escalas) {
         Roteiro roteiro = roteiroService.getById(escala.getRoteiro().getId()).get();
         Integer quantidadePortos = roteiro.getQuantidadePortos();
         int quantidadeDeEscalas = escalas.size();
         if(quantidadeDeEscalas >= quantidadePortos){
             throw new EscalaValidationException("Quantidade de Portos limitada. Verifique a quantidade de Portos permitida no Roteiro!");
         }
-
+    }
+    public void validarSeEhUltimaEscala(Escala escala, List<Escala> escalas){
+        if(!isLastEscala(escala,escalas)){
+            throw new EscalaValidationException("Não é permitida a manipulação de uma escala que não seja a última!");
+        }
+    }
+    private boolean isLastEscala(Escala escala, List<Escala> escalas){
+       if(escalas.get(0).getId() == escala.getId()){
+           return true;
+       }else return false;
     }
 }

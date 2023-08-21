@@ -36,11 +36,18 @@ public class EscalaController {
             Escala saved = escalaService.save(escala);
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
         }catch (EscalaValidationException e){
-            //System.out.println(e.getMessage());
-            //System.out.println("AQUIIIII");
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("Message", e.getMessage()));
         }
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteById(@PathVariable Long id){
+        try{
+            escalaService.deleteById(id);
+            return ResponseEntity.ok(Map.of("Mensagem", "Deletado com sucesso"));
 
-
+        }catch (EscalaValidationException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("Message", e.getMessage()));
+        }
+    }
 }
