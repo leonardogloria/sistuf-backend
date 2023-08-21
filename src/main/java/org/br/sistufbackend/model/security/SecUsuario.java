@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "sec_users")
-public class User implements UserDetails {
+public class SecUsuario implements UserDetails {
 
     @Id
     private String login;
@@ -33,6 +33,7 @@ public class User implements UserDetails {
     @Column(name = "priv_admin")
     private YesNo privAdmin;
 
+    @JsonIgnore
     @Column(name = "tipo_usr")
     private Character tipoUsr;
 
@@ -40,16 +41,17 @@ public class User implements UserDetails {
 
     private String nip;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "sec_users_groups",
             joinColumns = @JoinColumn(name = "login", referencedColumnName = "login"),
             inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "group_id")
     )
-    private List<UserGroup> userGroups;
+    private List<SecGrupoUsuario> listSecGrupoUsuario;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.userGroups;
+        return this.getListSecGrupoUsuario();
     }
 
     @Override

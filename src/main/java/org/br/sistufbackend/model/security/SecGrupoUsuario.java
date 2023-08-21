@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Entity
 @Table(name = "sec_groups")
 @Data
-public class UserGroup implements GrantedAuthority {
+public class SecGrupoUsuario implements GrantedAuthority {
 
     @Id
     @Column(name = "group_id")
