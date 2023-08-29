@@ -41,6 +41,10 @@ public class SecUsuario implements UserDetails {
 
     private String nip;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "change_pswd")
+    private YesNo changePswd;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "sec_users_groups",
@@ -80,7 +84,7 @@ public class SecUsuario implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return !this.getChangePswd().isTrue();
     }
 
     @Override
