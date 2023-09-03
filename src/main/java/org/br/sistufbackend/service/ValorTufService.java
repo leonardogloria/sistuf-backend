@@ -9,5 +9,6 @@ public interface ValorTufService {
     Long count();
     ValorTUF create(ValorTUF valorTUF);
     void deleteById(Long id);
+    ValorTUF getById(long id);
 
 }

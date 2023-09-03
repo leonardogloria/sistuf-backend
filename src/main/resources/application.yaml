@@ -10,6 +10,6 @@ spring:
     database: postgresql
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 server:
   port: 9009

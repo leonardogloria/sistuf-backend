@@ -1,11 +1,11 @@
 spring:
-  datasource:
-    password: postgres
-    username: postgres
-    url: jdbc:postgresql://localhost:5433/bd_sistuf
+  #datasource:
+    #password: postgres
+    #username: postgres
+    #url: jdbc:postgresql://localhost:5433/bd_sistuf
   jpa:
     format-sql: true
-    hibernate:
+    åhibernate:
       ddl-auto: update
   http:
     log-request-details: true

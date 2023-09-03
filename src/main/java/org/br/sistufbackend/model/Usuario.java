@@ -16,6 +16,8 @@ public class Usuario {
     @Id
     @Column(name = "login")
     private String id;
+
+
     @Column(name = "pswd")
     private String senha;
     @Column(name = "name")

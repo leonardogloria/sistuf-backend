@@ -36,10 +36,10 @@ public class TrocarSenhaServiceImpl implements TrocarSenhaService {
         SecUsuario secUsuario = this.secUsuarioRepository.findByLoginOrCpfOrNip(username).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Dados do usuário não encontrados."));
 
-        if (!requestDTO.getSenhaAtual().equals(secUsuario.getPswd()))
+        if (!requestDTO.getSenhaAtual().equals(secUsuario.getSenha()))
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Senha atual não confere com a salva para o usuário.");
 
-        secUsuario.setPswd(requestDTO.getSenhaNova());
+        secUsuario.setSenha(requestDTO.getSenhaNova());
 
         this.secUsuarioRepository.save(secUsuario);
     }

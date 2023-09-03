@@ -14,4 +14,6 @@ public interface UsuarioService {
     void update(String id, Usuario usuario);
     Long count();
     List<Usuario> getAll(Integer page, Integer size);
+    Optional<Usuario> findByCpf(String cpf);
+
 }

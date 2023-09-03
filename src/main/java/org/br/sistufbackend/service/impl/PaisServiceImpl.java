@@ -17,6 +17,7 @@ import java.util.Optional;
 public class PaisServiceImpl implements PaisService {
     @Autowired
     PaisRepository paisRepository;
+
     @Override
     public List<Pais> getAll(Integer pageSize) {
         Pageable page = Pageable.ofSize(pageSize);
