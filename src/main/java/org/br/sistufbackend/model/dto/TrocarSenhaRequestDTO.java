@@ -8,5 +8,6 @@ public class TrocarSenhaRequestDTO {
     private String senhaAtual;
     private String senhaNova;
     private String confirmacao;
+    private boolean ignorarAtual = false;
 
 }
