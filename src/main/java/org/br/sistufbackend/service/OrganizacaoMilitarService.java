@@ -1,6 +1,7 @@
 package org.br.sistufbackend.service;
 
 import org.br.sistufbackend.model.OrganizacaoMilitar;
+import org.br.sistufbackend.model.Usuario;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,4 +17,10 @@ public interface OrganizacaoMilitarService {
     List<OrganizacaoMilitar> findByNome(String nome);
 
     List<OrganizacaoMilitar> getAll(Integer size, Integer page);
+    Long findOrganizacaoDoUsuarioById(String login);
+    List<Usuario> findAllUsuariosByOrgMilId(Long id);
+    void associarUsuarioAOrganizacao(String login, Long organizacao);
+
+
+     boolean isUsuarioInOrgMil(String login);
 }

@@ -3,6 +3,7 @@ package org.br.sistufbackend.service.impl;
 import org.br.sistufbackend.exception.UsuarioValidationException;
 import org.br.sistufbackend.model.Roteiro;
 import org.br.sistufbackend.model.Usuario;
+import org.br.sistufbackend.repository.SecUsuarioRepository;
 import org.br.sistufbackend.repository.UsuarioRepository;
 import org.br.sistufbackend.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import java.util.Optional;
 public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
+    @Autowired
+    SecUsuarioRepository secUsuarioRepository;
     @Override
     public Usuario save(Usuario usuario) {
         if(usuarioRepository.existsById(usuario.getId())) throw new UsuarioValidationException("Login já Cadastrado");
@@ -66,5 +69,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     public List<Usuario> getAll(Integer page, Integer size) {
         PageRequest byNome = PageRequest.of(page, size, Sort.by("nome").ascending());
         return usuarioRepository.findAll(byNome).stream().toList();
+    }
+
+    @Override
+    public Optional<Usuario> findByCpf(String cpf) {
+        Usuario byCpf = usuarioRepository.findByCpf(cpf);
+        if(byCpf == null) return Optional.empty();
+        else return Optional.of(byCpf);
+
     }
 }

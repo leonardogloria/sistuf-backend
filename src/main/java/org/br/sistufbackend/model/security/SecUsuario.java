@@ -2,7 +2,11 @@ package org.br.sistufbackend.model.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.br.sistufbackend.model.Agencia;
 import org.br.sistufbackend.model.enums.YesNo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,34 +15,38 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Data
+@Data@Builder
+@AllArgsConstructor@NoArgsConstructor
 @Table(name = "sec_users")
 public class SecUsuario implements UserDetails {
 
     @Id
-    private String login;
+    @Column(name = "login")
+    private String id;
 
     @JsonIgnore
-    private String pswd;
+    @Column(name = "pswd")
+    private String senha;
 
-    private String name;
+    @Column(name = "name")
+    private String nome;
 
     @Enumerated(EnumType.STRING)
     private YesNo active;
-
+    @Column(name = "email")
+    private String email;
     @Column(name = "activation_code")
-    private String activationCode;
+    private String codigoAtivacao;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "priv_admin")
-    private YesNo privAdmin;
+    private YesNo isAdmin;
 
     @JsonIgnore
     @Column(name = "tipo_usr")
     private Character tipoUsr;
 
     private String cpf;
-
     private String nip;
 
     @Enumerated(EnumType.STRING)
@@ -53,6 +61,14 @@ public class SecUsuario implements UserDetails {
     )
     private List<SecGrupoUsuario> listSecGrupoUsuario;
 
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "agencia_idagencia")
+    private Agencia agencia;
+
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.getListSecGrupoUsuario();
@@ -60,12 +76,12 @@ public class SecUsuario implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.pswd;
+        return this.senha;
     }
 
     @Override
     public String getUsername() {
-        return this.login;
+        return this.id;
     }
 
     private boolean isAtiva() {

@@ -45,4 +45,5 @@ public class Agencia {
     @Column(name = "status_disponibilidade")
     private Integer status;
 
+
 }

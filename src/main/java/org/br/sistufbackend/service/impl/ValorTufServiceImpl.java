@@ -42,6 +42,11 @@ public class ValorTufServiceImpl implements ValorTufService {
         valorTufRepository.deleteById(id);
     }
 
+    @Override
+    public ValorTUF getById(long id) {
+        return valorTufRepository.findById(id).get();
+    }
+
     private void validaIntervalo(ValorTUF valorTUF){
         List<ValorTUF> all = valorTufRepository.findAll();
          all

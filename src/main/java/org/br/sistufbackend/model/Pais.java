@@ -28,4 +28,13 @@ public class Pais {
     private String codigoDDI;
     @Column(name = "acordo")
     private String acordoComBrasil;
+
+    @Override
+    public String toString() {
+        return "Pais{" +
+                "id=" + id +
+                ", codigoPaisAlpha3='" + codigoPaisAlpha3 + '\'' +
+                ", nome='" + nome + '\'' +
+                '}';
+    }
 }

@@ -14,7 +14,7 @@ public class HeaderServiceImpl implements HeaderService {
     public HttpHeaders getCustomHeaders(Map<String, String> headers) {
         HttpHeaders httpHeaders = new HttpHeaders();
         headers.forEach(httpHeaders::set);
-        httpHeaders.setAccessControlExposeHeaders(Arrays.asList("*"));
+        httpHeaders.setAccessControlExposeHeaders(Arrays.asList("total-size"));
         return httpHeaders;
 
 

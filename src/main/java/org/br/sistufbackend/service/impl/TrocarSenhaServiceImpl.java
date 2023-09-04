@@ -14,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Random;
 
-import static org.br.sistufbackend.model.enums.YesNo.N;
 import static org.br.sistufbackend.model.enums.YesNo.Y;
 import static org.springframework.util.StringUtils.containsWhitespace;
 import static org.springframework.util.StringUtils.hasText;
@@ -43,11 +42,10 @@ public class TrocarSenhaServiceImpl implements TrocarSenhaService {
         SecUsuario secUsuario = this.secUsuarioRepository.findByLoginOrCpfOrNip(username).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Dados do usuário não encontrados."));
 
-        if (!requestDTO.isIgnorarAtual() && !requestDTO.getSenhaAtual().equals(secUsuario.getPswd()))
+        if (!requestDTO.isIgnorarAtual() && !requestDTO.getSenhaAtual().equals(secUsuario.getSenha()))
             throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Senha atual não confere com a salva para o usuário.");
 
-        secUsuario.setPswd(requestDTO.getSenhaNova());
-        secUsuario.setChangePswd(N);
+        secUsuario.setSenha(requestDTO.getSenhaNova());
 
         SecUsuario loggedUser = this.secUsuarioRepository.save(secUsuario);
 
@@ -58,7 +56,7 @@ public class TrocarSenhaServiceImpl implements TrocarSenhaService {
     @Override
     public String resetSenha(String username) {
         SecUsuario currentUser = (SecUsuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!currentUser.getPrivAdmin().isTrue())
+        if (!currentUser.getIsAdmin().isTrue())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Usuário não tem direito de acesso à funcionalidade.");
 
 
@@ -67,7 +65,7 @@ public class TrocarSenhaServiceImpl implements TrocarSenhaService {
 
         secUsuario.setChangePswd(Y);
         String randomPswd = this.generateRandomPswd();
-        secUsuario.setPswd(randomPswd);
+        secUsuario.setSenha(randomPswd);
         this.secUsuarioRepository.save(secUsuario);
 
         return randomPswd;
