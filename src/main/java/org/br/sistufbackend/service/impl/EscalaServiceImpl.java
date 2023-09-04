@@ -24,7 +24,6 @@ public class EscalaServiceImpl implements EscalaService {
         validarEscalaService.validarDataSaida(escala);
         validarEscalaService.validarQuantidadeDePortos(escala, getAllByRoteiroId(escala.getRoteiro().getId()));
         validarEscalaService.validarRangeDeDatas(escala);
-
         return escalaRepository.save(escala);
     }
 
@@ -46,6 +45,20 @@ public class EscalaServiceImpl implements EscalaService {
 
     @Override
     public void update(Long id, Escala escala) {
+        Escala escalaExistente = escalaRepository.findById(id).get();
+
+        escalaExistente.setAgencia(escala.getAgencia());
+        escalaExistente.setPorto(escala.getPorto());
+        escalaExistente.setCategoriaVisita(escala.getCategoriaVisita());
+        escalaExistente.setRazaoDeVisita(escala.getRazaoDeVisita());
+        escalaExistente.setChegada(escala.getChegada());
+        escalaExistente.setSaida(escala.getSaida());
+        validarEscalaService.validarDataSaida(escalaExistente);
+        validarEscalaService.validarRangeDeDatas(escalaExistente);
+        validarEscalaService.validarSeEhUltimaEscala(escalaExistente, getAllByRoteiroId(escalaExistente.getRoteiro().getId()));
+
+        escalaRepository.save(escalaExistente);
+
 
     }
 

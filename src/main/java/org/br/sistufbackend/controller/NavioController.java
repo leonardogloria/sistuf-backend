@@ -124,7 +124,8 @@ public class NavioController {
                     .ip(ipFromRequest)
                     .username(authentication.getUsername())
                     .criador("SPRINGBOOT")
-                    .aplicacao(UC_NAVIO)
+                    .aplicacao(UC_NAVIO
+                    )
                     .data(LocalDateTime.now()).build();
             logService.insert(log);
 
