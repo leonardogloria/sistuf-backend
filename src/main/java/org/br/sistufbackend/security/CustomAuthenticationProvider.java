@@ -24,7 +24,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName().trim();
         String password = ((String) authentication.getCredentials()).trim();
         if (username.isBlank() || password.isBlank()) {
-            throw new BadCredentialsException("Login failed! Please try again.");
+            throw new BadCredentialsException("Todos os campos são obrigatórios.");
         }
 
 
@@ -32,7 +32,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         try {
             user = this.userDetailsService.loadUserByUsername(username);
         } catch (Exception e) {
-            throw new BadCredentialsException("Please enter a valid username and password.");
+            throw new BadCredentialsException("Usuário não encontrado.");
         }
 
         List<GrantedAuthority> permlist = getGrantedAuthorities(password, user);
@@ -42,15 +42,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private static List<GrantedAuthority> getGrantedAuthorities(String password, UserDetails user) {
         if (!Objects.equals(password, user.getPassword().trim())) {
-            throw new BadCredentialsException("Please enter a valid username and password.");
+            throw new BadCredentialsException("Informações de login inválidas.");
         }
 
         if (!user.isEnabled()) {
-            throw new DisabledException("Please enter a valid username and password.");
+            throw new DisabledException("Usuário desabilitado.");
         }
 
         if (!user.isAccountNonLocked()) {
-            throw new LockedException("Account locked. ");
+            throw new LockedException("Conta de usuário bloqueada.");
         }
 
        return new ArrayList<>(user.getAuthorities());

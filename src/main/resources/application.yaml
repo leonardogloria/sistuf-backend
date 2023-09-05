@@ -13,3 +13,5 @@ spring:
       ddl-auto: update
 server:
   port: 9009
+  error:
+    include-message: on-param

@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Random;
 
+import static org.br.sistufbackend.model.enums.YesNo.N;
 import static org.br.sistufbackend.model.enums.YesNo.Y;
 import static org.springframework.util.StringUtils.containsWhitespace;
 import static org.springframework.util.StringUtils.hasText;
@@ -43,9 +44,10 @@ public class TrocarSenhaServiceImpl implements TrocarSenhaService {
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Dados do usuário não encontrados."));
 
         if (!requestDTO.isIgnorarAtual() && !requestDTO.getSenhaAtual().equals(secUsuario.getSenha()))
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Senha atual não confere com a salva para o usuário.");
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Senha atual informada não é igual a salva para o usuário.");
 
         secUsuario.setSenha(requestDTO.getSenhaNova());
+        secUsuario.setChangePswd(N);
 
         SecUsuario loggedUser = this.secUsuarioRepository.save(secUsuario);
 
