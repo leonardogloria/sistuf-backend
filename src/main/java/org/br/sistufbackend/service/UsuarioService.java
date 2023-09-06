@@ -15,5 +15,6 @@ public interface UsuarioService {
     Long count();
     List<Usuario> getAll(Integer page, Integer size);
     Optional<Usuario> findByCpf(String cpf);
+    List<Usuario> findByKeys(String key);
 
 }

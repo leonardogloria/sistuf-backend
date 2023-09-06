@@ -78,4 +78,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         else return Optional.of(byCpf);
 
     }
+
+    @Override
+    public List<Usuario> findByKeys(String key) {
+        return usuarioRepository.findUsuariosByIdOrNipOrCpf(key,key,key);
+
+    }
 }

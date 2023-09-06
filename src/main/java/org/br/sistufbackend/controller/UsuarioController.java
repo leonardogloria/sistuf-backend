@@ -9,6 +9,7 @@ import org.br.sistufbackend.model.enums.LogAction;
 import org.br.sistufbackend.model.security.SecUsuario;
 import org.br.sistufbackend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +67,8 @@ public class UsuarioController {
             HttpHeaders customHeaders = headerService.getCustomHeaders(Map.of("total-size", count.toString()));
             List<Usuario> all ;
             if(nome != null && !nome.isEmpty()){
-                all = usuarioService.getAll();
+                all = usuarioService.findByKeys(nome);
+                //all = usuarioService.getAll();
             }else{
                 all = usuarioService.getAll(page,size);
             }
@@ -120,24 +122,24 @@ public class UsuarioController {
                     .data(LocalDateTime.now()).build();
             logService.insert(log);
 
-
-
-
             if(isInAgencia){
                 authentication = (SecUsuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 Long agenciaDoUsuarioById = agenciaService.findAgenciaDoUsuarioById(authentication.getId());
-                agenciaService.associaUsuarioAAgencia(saved.getId(),agenciaDoUsuarioById);
-                ipFromRequest = networkService.getIpFromRequest(request);
-                Log logAgencia = Log.builder()
-                        .acao(LogAction.INSERT)
-                        .descricao(saved.toString())
-                        .ip(ipFromRequest)
-                        .username(authentication.getUsername())
-                        .criador("SPRINGBOOT")
-                        .aplicacao(UC_USUARIOS)
-                        .descricao("USUARIO: " + saved.getId() + " INSERIDO NA AGENCIA: " + agenciaDoUsuarioById )
-                        .data(LocalDateTime.now()).build();
-                logService.insert(logAgencia);
+                try{
+                    agenciaService.associaUsuarioAAgencia(saved.getId(),agenciaDoUsuarioById);
+                    ipFromRequest = networkService.getIpFromRequest(request);
+                    Log logAgencia = Log.builder()
+                            .acao(LogAction.INSERT)
+                            .descricao(saved.toString())
+                            .ip(ipFromRequest)
+                            .username(authentication.getUsername())
+                            .criador("SPRINGBOOT")
+                            .aplicacao(UC_USUARIOS)
+                            .descricao("USUARIO: " + saved.getId() + " INSERIDO NA AGENCIA: " + agenciaDoUsuarioById )
+                            .data(LocalDateTime.now()).build();
+                    logService.insert(logAgencia);
+                }catch (EmptyResultDataAccessException ignore){}
+
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 
