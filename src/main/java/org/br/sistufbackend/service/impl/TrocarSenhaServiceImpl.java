@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Objects;
 import java.util.Random;
 
 import static org.br.sistufbackend.model.enums.YesNo.N;
@@ -23,6 +25,9 @@ import static org.springframework.util.StringUtils.hasText;
 public class TrocarSenhaServiceImpl implements TrocarSenhaService {
     @Autowired
     private SecUsuarioRepository secUsuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void trocarSenha(TrocarSenhaRequestDTO requestDTO) {
@@ -43,10 +48,15 @@ public class TrocarSenhaServiceImpl implements TrocarSenhaService {
         SecUsuario secUsuario = this.secUsuarioRepository.findByLoginOrCpfOrNip(username).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Dados do usuário não encontrados."));
 
-        if (!requestDTO.isIgnorarAtual() && !requestDTO.getSenhaAtual().equals(secUsuario.getSenha()))
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Senha atual informada não é igual a salva para o usuário.");
 
-        secUsuario.setSenha(requestDTO.getSenhaNova());
+
+        if (!requestDTO.isIgnorarAtual()) {
+            if (!Objects.equals(requestDTO.getSenhaAtual(), secUsuario.getPassword()) &&
+                            !passwordEncoder.matches(requestDTO.getSenhaAtual(), secUsuario.getPassword()))
+                throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Senha atual informada não é igual a salva para o usuário.");
+        }
+
+        secUsuario.setSenha(passwordEncoder.encode(requestDTO.getSenhaNova()));
         secUsuario.setChangePswd(N);
 
         SecUsuario loggedUser = this.secUsuarioRepository.save(secUsuario);
@@ -67,7 +77,7 @@ public class TrocarSenhaServiceImpl implements TrocarSenhaService {
 
         secUsuario.setChangePswd(Y);
         String randomPswd = this.generateRandomPswd();
-        secUsuario.setSenha(randomPswd);
+        secUsuario.setSenha(this.passwordEncoder.encode(randomPswd));
         this.secUsuarioRepository.save(secUsuario);
 
         return randomPswd;
