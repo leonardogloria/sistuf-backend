@@ -15,3 +15,8 @@ server:
   port: 9009
   error:
     include-message: on-param
+
+
+pass:
+  encoder:
+    salt: SistufMarinha2023!@
