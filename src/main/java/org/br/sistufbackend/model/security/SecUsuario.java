@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.br.sistufbackend.converter.YesNoConverter;
 import org.br.sistufbackend.model.Agencia;
 import org.br.sistufbackend.model.enums.YesNo;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,14 +32,14 @@ public class SecUsuario implements UserDetails {
     @Column(name = "name")
     private String nome;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = YesNoConverter.class)
     private YesNo active;
     @Column(name = "email")
     private String email;
     @Column(name = "activation_code")
     private String codigoAtivacao;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = YesNoConverter.class)
     @Column(name = "priv_admin")
     private YesNo isAdmin;
 
@@ -49,7 +50,7 @@ public class SecUsuario implements UserDetails {
     private String cpf;
     private String nip;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = YesNoConverter.class)
     @Column(name = "change_pswd")
     private YesNo changePswd;
 

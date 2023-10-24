@@ -16,8 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Objects;
 import java.util.Random;
 
-import static org.br.sistufbackend.model.enums.YesNo.N;
-import static org.br.sistufbackend.model.enums.YesNo.Y;
+import static org.br.sistufbackend.model.enums.YesNo.*;
 import static org.springframework.util.StringUtils.containsWhitespace;
 import static org.springframework.util.StringUtils.hasText;
 
