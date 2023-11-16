@@ -1,11 +1,13 @@
 spring:
-  #datasource:
-    #password: postgres
-    #username: postgres
-    #url: jdbc:postgresql://localhost:5433/bd_sistuf
+  datasource:
+    password: marinha123!
+    username: postgres
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/sistuf
+
   jpa:
     format-sql: true
-    åhibernate:
+    hibernate:
       ddl-auto: update
   http:
     log-request-details: true

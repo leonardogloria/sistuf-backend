@@ -59,4 +59,10 @@ public class CotacaoDolarServiceImpl implements CotacaoDolarService {
     public Long count() {
         return cotacaoDolarRepository.count();
     }
+
+    @Override
+    public CotacaoDolar getLast() {
+        PageRequest of = PageRequest.of(0, 1);
+        return cotacaoDolarRepository.getCotacaoDolarByDataBeforeOrderByDataDesc(LocalDate.now(),of).get(0);
+    }
 }

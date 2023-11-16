@@ -1,7 +1,7 @@
 spring:
   datasource:
-    #password: Marinha1!
-    password: ${DATABASE_PASS}
+    password: Marinha1!
+    #password: ${DATABASE_PASS}
     username: postgres
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://bdmare.czwli4k1jtfe.us-east-1.rds.amazonaws.com:5432/bd_sistuf
@@ -11,5 +11,5 @@ spring:
     hibernate:
       ddl-auto: none
 server:
-  port: 8080
-  #port: 9009
+  #port: 8080
+  port: 9009

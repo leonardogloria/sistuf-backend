@@ -19,4 +19,5 @@ public interface CotacaoDolarService {
 
     List<CotacaoDolar> getAll(Integer size, Integer page);
     Long count();
+    CotacaoDolar getLast();
 }

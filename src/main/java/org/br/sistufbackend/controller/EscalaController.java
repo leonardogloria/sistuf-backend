@@ -3,7 +3,6 @@ package org.br.sistufbackend.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.br.sistufbackend.model.Escala;
 import org.br.sistufbackend.model.Log;
-import org.br.sistufbackend.model.Porto;
 import org.br.sistufbackend.model.enums.LogAction;
 import org.br.sistufbackend.model.security.SecUsuario;
 import org.br.sistufbackend.service.EscalaService;
@@ -112,6 +111,11 @@ public class EscalaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("Message", e.getMessage()));
         }
         return ResponseEntity.ok(Map.of("Mensagem", "Atualizado Com sucesso"));
+
+    }
+    @GetMapping("/verificarDebito/{id}")
+    public void verificarDebito(@PathVariable  Long id){
+        escalaService.verificarDebito(id);
 
     }
 }
