@@ -2,11 +2,13 @@ package org.br.sistufbackend.security;
 
 import org.br.sistufbackend.service.impl.SistufUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,6 +20,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     private SistufUserDetailsServiceImpl userDetailsService;
+
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public void setPasswordEncoder(@Lazy PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -35,15 +44,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Usuário não encontrado.");
         }
 
-        List<GrantedAuthority> permlist = getGrantedAuthorities(password, user);
+        List<GrantedAuthority> permlist = this.getGrantedAuthorities(password, user);
 
         return new UsernamePasswordAuthenticationToken(user, password, permlist);
     }
 
-    private static List<GrantedAuthority> getGrantedAuthorities(String password, UserDetails user) {
-        if (!Objects.equals(password, user.getPassword().trim())) {
+    private List<GrantedAuthority> getGrantedAuthorities(String password, UserDetails user) {
+        if (!Objects.equals(password, user.getPassword().trim()) &&
+                !this.passwordEncoder.matches(password, user.getPassword()))
             throw new BadCredentialsException("Informações de login inválidas.");
-        }
 
         if (!user.isEnabled()) {
             throw new DisabledException("Usuário desabilitado.");
