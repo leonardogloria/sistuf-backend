@@ -1,6 +1,7 @@
 package org.br.sistufbackend.service.impl;
 
 import org.br.sistufbackend.exception.TonelagemValidationException;
+import org.br.sistufbackend.exception.ValorTUFNotFoundException;
 import org.br.sistufbackend.model.ValorTUF;
 import org.br.sistufbackend.repository.ValorTufRepository;
 import org.br.sistufbackend.service.ValorTufService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ValorTufServiceImpl implements ValorTufService {
@@ -45,6 +47,17 @@ public class ValorTufServiceImpl implements ValorTufService {
     @Override
     public ValorTUF getById(long id) {
         return valorTufRepository.findById(id).get();
+    }
+
+    @Override
+    public ValorTUF getByTonelagem(int tonelagem) {
+        Optional<ValorTUF> any = valorTufRepository.findAll()
+                .stream()
+                .filter(valorTUF -> tonelagem > valorTUF.getTonelagemPesoBrutoInicial() &&
+                        tonelagem < valorTUF.getTonelagemPesoBrutoFinal()
+                ).findAny();
+
+        return any.orElseThrow(() -> new ValorTUFNotFoundException("Valor da TUF nao localizado"));
     }
 
     private void validaIntervalo(ValorTUF valorTUF){

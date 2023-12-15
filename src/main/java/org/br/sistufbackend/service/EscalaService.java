@@ -1,6 +1,7 @@
 package org.br.sistufbackend.service;
 
 import org.br.sistufbackend.model.Escala;
+import org.br.sistufbackend.model.GRU;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,8 @@ public interface EscalaService {
     List<Escala> getAll(Integer page, Integer size);
     List<Escala> getAllByRoteiroId(Long id);
 
-    void verificarDebito(Long id);
+    Optional<GRU> verificarDebito(Long id);
+    void criarGru(List<Long> ids);
+
 
 }

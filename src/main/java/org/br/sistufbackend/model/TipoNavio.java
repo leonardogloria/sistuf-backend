@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.br.sistufbackend.model.enums.RegraDeCobrancaTUF;
+import org.br.sistufbackend.model.enums.RegraDeCobrancaTUFNavio;
 
 @Entity
 @Data@AllArgsConstructor@NoArgsConstructor@Builder
@@ -21,7 +22,7 @@ public class TipoNavio {
     @Column(name = "nome")
     private String tipoDeNavio;
     @Column(name = "regra")
-    private RegraDeCobrancaTUF regraDeCobrancaTUF;
+    private RegraDeCobrancaTUFNavio regraDeCobrancaTUF;
     @ManyToOne
     @JoinColumn(name = "categoria_visita_idcategoria_visita")
     private CategoriaVisita categoriaVisita;

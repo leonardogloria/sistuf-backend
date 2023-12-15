@@ -1,5 +1,7 @@
 package org.br.sistufbackend.model;
 
+
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +14,10 @@ import java.time.LocalDate;
 
 @Entity @Data
 @AllArgsConstructor @NoArgsConstructor @Builder
-public class GRU {
+public class GRUIsenta  {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="gru_sequence")
-    @SequenceGenerator(name="gru_sequence", sequenceName="gru_idgru_seq",
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="gru_isenta_sequence")
+    @SequenceGenerator(name="gru_isenta_sequence", sequenceName="gru_idgru_isenta_seq",
             allocationSize = 1)
     @Column(name = "idgru")
     private Long id;

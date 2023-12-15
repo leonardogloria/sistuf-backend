@@ -1,7 +1,10 @@
 package org.br.sistufbackend.controller;
 
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.br.sistufbackend.model.Escala;
+import org.br.sistufbackend.model.GRU;
 import org.br.sistufbackend.model.Log;
 import org.br.sistufbackend.model.enums.LogAction;
 import org.br.sistufbackend.model.security.SecUsuario;
@@ -113,9 +116,19 @@ public class EscalaController {
         return ResponseEntity.ok(Map.of("Mensagem", "Atualizado Com sucesso"));
 
     }
-    @GetMapping("/verificarDebito/{id}")
-    public void verificarDebito(@PathVariable  Long id){
-        escalaService.verificarDebito(id);
-
+    @GetMapping("/{id}/verificarDebito")
+    public ResponseEntity<?> verificarDebito(@PathVariable Long id){
+        try {
+            GRU gru = escalaService.verificarDebito(id).orElseThrow(EntityNotFoundException::new);
+            return ResponseEntity.ok(gru);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("Mensagem", "Não Localizado"));
+        }
+    }
+    @GetMapping("/criarGru")
+    public ResponseEntity criarGrus(@RequestParam List<Long> grus){
+        System.out.println(grus);
+        escalaService.criarGru(grus);
+        return ResponseEntity.ok().build();
     }
 }

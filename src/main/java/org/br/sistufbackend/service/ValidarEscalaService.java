@@ -6,6 +6,7 @@ import org.br.sistufbackend.validation.exception.EscalaValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -51,7 +52,8 @@ public class ValidarEscalaService {
         }
     }
     private boolean isLastEscala(Escala escala, List<Escala> escalas){
-       if(escalas.get(0).getId() == escala.getId()){
+        List<Escala> list = escalas.stream().sorted(Comparator.comparing(Escala::getChegada)).toList();
+        if(list.get(list.size() - 1).getId().equals(escala.getId())){
            return true;
        }else return false;
     }

@@ -20,3 +20,10 @@ server:
 pass:
   encoder:
     salt: SistufMarinha2023!@
+
+pagtesouro:
+  url:  https://valpagtesouro.tesouro.gov.br/api/gru/solicitacao-pagamento
+  urlVerificacaoPagamento: https://valpagtesouro.tesouro.gov.br/api/gru/pagamentos/
+  token: eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI2NzMwMDEifQ.X1GjtYAc1jrxYU5cevRRIUPJQLCzI8AtUDkpk-wzhWW18pyoVbQWQf2GL9vIgi23x1sgKhpD5-jzR4B6ebXO3HgfqZ4IVhwnJ4P0_ywSBHoImAibVW1Bj3qYMROIOgGta8eBPlEJeZlkoAN9wCf6ZC2K8wlqd9zk3v0Xul8ngoBJ5L90YH948D_tbjs8lWjjR2cmtsa7g2bmq3BSjXZjt9-JSx04FJUdKg9JNPptl4JS-s6oHMUp1Ek6xPDf1XTF5KNWIpIUdbJY_ufRdlTq0QNQRjgPlnIQxYb65Rn96PAYB9sOkZS67dRXLZCQDWflunXKWCmb_ta73a6pQANmyA
+  codigoServico: 5204
+  modoNavegacao: 2

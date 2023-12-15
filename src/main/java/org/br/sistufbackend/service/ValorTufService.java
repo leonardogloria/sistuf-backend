@@ -11,4 +11,6 @@ public interface ValorTufService {
     void deleteById(Long id);
     ValorTUF getById(long id);
 
+    ValorTUF getByTonelagem(int tonelagem);
+
 }

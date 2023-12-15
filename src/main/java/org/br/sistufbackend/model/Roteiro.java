@@ -34,5 +34,7 @@ public class Roteiro {
     private Porto portoDestino;
     @Column(name = "qtd_portos")
     private Integer quantidadePortos;
+    @Column(name = "grus_geradas")
+    private Boolean grusGeradas;
 
 }

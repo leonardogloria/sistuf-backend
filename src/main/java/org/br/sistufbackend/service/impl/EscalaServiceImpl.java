@@ -2,6 +2,8 @@ package org.br.sistufbackend.service.impl;
 
 import org.br.sistufbackend.model.*;
 import org.br.sistufbackend.model.enums.RegraDeCobrancaTUF;
+import org.br.sistufbackend.model.enums.RegraDeCobrancaTUFNavio;
+import org.br.sistufbackend.model.payload.PagTesouroResponsePayload;
 import org.br.sistufbackend.repository.EscalaRepository;
 import org.br.sistufbackend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -32,6 +35,12 @@ public class EscalaServiceImpl implements EscalaService {
     TipoNavioService tipoNavioService;
     @Autowired
     RazaoDeVisitaService razaoDeVisitaService;
+    @Autowired
+    PagTesouroService pagTesouroService;
+    @Autowired
+    GruService gruService;
+    @Autowired
+    PortoService portoService;
 
 
 
@@ -41,8 +50,9 @@ public class EscalaServiceImpl implements EscalaService {
         validarEscalaService.validarQuantidadeDePortos(escala, getAllByRoteiroId(escala.getRoteiro().getId()));
         validarEscalaService.validarRangeDeDatas(escala);
 
-        //return escalaRepository.save(escala);
-        return null;
+        Escala saved = escalaRepository.save(escala);
+     //   criarGru(saved.getId());
+        return saved;
     }
     private ValorTUF getValorTufFromNavio(Navio navio){
         List<ValorTUF> all = valorTufService.getAll();
@@ -74,7 +84,6 @@ public class EscalaServiceImpl implements EscalaService {
     @Override
     public void update(Long id, Escala escala) {
         Escala escalaExistente = escalaRepository.findById(id).get();
-
         escalaExistente.setAgencia(escala.getAgencia());
         escalaExistente.setPorto(escala.getPorto());
         escalaExistente.setCategoriaVisita(escala.getCategoriaVisita());
@@ -86,7 +95,6 @@ public class EscalaServiceImpl implements EscalaService {
         validarEscalaService.validarSeEhUltimaEscala(escalaExistente, getAllByRoteiroId(escalaExistente.getRoteiro().getId()));
 
         escalaRepository.save(escalaExistente);
-
 
     }
 
@@ -108,12 +116,36 @@ public class EscalaServiceImpl implements EscalaService {
     }
 
     @Override
-    public void verificarDebito(Long id) {
+    public Optional<GRU> verificarDebito(Long id) {
+
+        Optional<GRU> byEscalaId = gruService.findByEscalaId(id);
+        if(byEscalaId.isEmpty()) return Optional.empty();
+        GRU gru = byEscalaId.get();
+        PagTesouroResponsePayload response =
+                pagTesouroService.verificaStatusPagamento(gru.getIdPagTesouro());
+        gru.setPagTesouroStatus(response.getSituacao().getCodigo().name());
+        if(response.getSituacao().getCodigo().name().equals("CONCLUIDO") && gru.getQuitacao() == null ){
+            gru.setQuitacao(response.getSituacao().getData().toLocalDate());
+            gruService.save(gru);
+        }
+
+        return Optional.of(gru);
+    }
+    public void criarGru(List<Long> ids){
+           ids.forEach(this::criarGru);
+        Escala escala = escalaRepository.findById(ids.get(0)).get();
+        Roteiro roteiro = roteiroService.getById(escala.getRoteiro().getId()).get();
+        roteiro.setGrusGeradas(true);
+        roteiroService.save(roteiro);
+    }
+
+    private void criarGru(Long id) {
         Escala escala = getById(id).get();
         Roteiro roteiro = roteiroService.getById(escala.getRoteiro().getId()).get();
         Navio navio = navioService.getById(roteiro.getNavio().getId()).get();
         Pais pais = paisService.getById(navio.getPais().getId()).get();
         TipoNavio tipoNavio = tipoNavioService.getById(navio.getTipoNavio().getId()).get();
+        Porto porto = portoService.getById(escala.getPorto().getId()).get();
         RazaoDeVisita razaoDeVisita = razaoDeVisitaService.getById(escala.getRazaoDeVisita().getId()).get();
         if(navioNaoEhBrasileiro(pais)){
             if(pais.getAcordoComBrasil().equals("0") || navio.getPagaIndependenteReciprocidade().equals("1") ){
@@ -122,11 +154,13 @@ public class EscalaServiceImpl implements EscalaService {
                     ValorTUF valorTufFromNavio = getValorTufFromNavio(navio);
                     CotacaoDolar last = cotacaoDolarService.getLast();
                     BigDecimal valorGRU = valorTufFromNavio.getValorDolar().multiply(last.getVenda());
-                    //TODO salvar GRU
+                    GRU gru = GRU.builder().escala(escala).valorReal(valorGRU).build();
+                    gruService.criarComPagTesouro(gru);
                 }else if(regraDeCobrancaTUF.equals(RegraDeCobrancaTUF.DEPENDE_NAVIO)){
                     int ordinal = tipoNavio.getRegraDeCobrancaTUF().ordinal();
-                    if(ordinal == 1){ //Dois primeiros e dois ultimos portos
+                    if(tipoNavio.getRegraDeCobrancaTUF().equals(RegraDeCobrancaTUFNavio.DOIS_PRIMEIROS_E_DOIS_ULTIMOS)){ //Dois primeiros e dois ultimos portos
                         List<Escala> escalasDoRoteiro = getAllByRoteiroId(roteiro.getId());
+                        escalasDoRoteiro = escalasDoRoteiro.stream().sorted(Comparator.comparing(Escala::getChegada)).toList();
                         int indexOfEscala = escalasDoRoteiro.indexOf(escala);
                         int quantidadeEscalas = escalasDoRoteiro.size();
                         boolean pagaGru = indexOfEscala == 0 || indexOfEscala == 1 || indexOfEscala == quantidadeEscalas - 1 || indexOfEscala == quantidadeEscalas - 2;
@@ -134,25 +168,52 @@ public class EscalaServiceImpl implements EscalaService {
                             CotacaoDolar last = cotacaoDolarService.getLast();
                             ValorTUF valorTufFromNavio = getValorTufFromNavio(navio);
                             BigDecimal valorGRU = valorTufFromNavio.getValorDolar().multiply(last.getVenda());
-                            //TODO salvar GRU
+                            GRU gru = GRU.builder().escala(escala).valorReal(valorGRU).build();
+                            gruService.criarComPagTesouro(gru);
                         }
 
 
-                    }else if (ordinal == 2){ //Portos impares no mesmo estado
+                    }else if (tipoNavio.getRegraDeCobrancaTUF().equals(RegraDeCobrancaTUFNavio.PORTOS_IMPARES_MESMO_ESTADO)){ //Portos impares no mesmo estado
+                        boolean pagaGru = false;
                         List<Escala> escalasDoRoteiro = getAllByRoteiroId(roteiro.getId());
+                        escalasDoRoteiro = escalasDoRoteiro.stream().sorted(Comparator.comparing(Escala::getChegada)).toList();
+
                         int indexOfEscala = escalasDoRoteiro.indexOf(escala);
-                        if(indexOfEscala % 2 != 0 ){
+                        if(ehOPrimeiroPorto(indexOfEscala)){
+                            Estado estadoPortoOrigem = roteiro.getPortoOrigem().getEstado();
+                            Estado estadoEscala = porto.getEstado();
+                            if(portosDoMesmoEstado(estadoPortoOrigem, estadoEscala)){
+                                pagaGru = true;
+                            }
+                        }else if(ehPortoImpar(indexOfEscala)){
+                            Estado estadoDoPortoDaEscala = portoService.getById(escala.getPorto().getId()).get().getEstado();
+                            Estado estadoDoPortoAnterior = portoService.getById(escalasDoRoteiro.get(indexOfEscala - 1).getPorto().getId()).get().getEstado();
+
+                            if( portosDoMesmoEstado(estadoDoPortoDaEscala, estadoDoPortoAnterior)){
+                                pagaGru = true;
+                            }
+                        }
+                        if(pagaGru){
                             CotacaoDolar last = cotacaoDolarService.getLast();
                             ValorTUF valorTufFromNavio = getValorTufFromNavio(navio);
                             BigDecimal valorGRU = valorTufFromNavio.getValorDolar().multiply(last.getVenda());
-                            //TODO salvar GRU
+                            GRU gru = GRU.builder().escala(escala).valorReal(valorGRU).build();
+                            gruService.criarComPagTesouro(gru);
                         }
 
 
 
-                    }else if( ordinal == 3){ //A cada 90 dias
+                    }else if( tipoNavio.getRegraDeCobrancaTUF().equals(RegraDeCobrancaTUFNavio.UMA_VEZ_A_CADA_90_DIAS)){ //A cada 90 dias
 
-                    }else if(ordinal == 4){// Todos os portos do pais
+
+
+                    }else if(tipoNavio.getRegraDeCobrancaTUF().equals(RegraDeCobrancaTUFNavio.TODOS_OS_PORTOS_NACIONAIS_VISITADOS)){// Todos os portos do pais
+                        CotacaoDolar last = cotacaoDolarService.getLast();
+                        ValorTUF valorTufFromNavio = getValorTufFromNavio(navio);
+                        BigDecimal valorGRU = valorTufFromNavio.getValorDolar().multiply(last.getVenda());
+                        GRU gru = GRU.builder().escala(escala).valorReal(valorGRU).build();
+                        gruService.criarComPagTesouro(gru);
+
 
                     }else { // Regra == 0 -> nao paga
 
@@ -166,5 +227,17 @@ public class EscalaServiceImpl implements EscalaService {
 
 
 
+    }
+
+    private static boolean ehPortoImpar(int indexOfEscala) {
+        return (indexOfEscala + 1) % 2 != 0;
+    }
+
+    private static boolean ehOPrimeiroPorto(int indexOfEscala) {
+        return (indexOfEscala + 1) == 1;
+    }
+
+    private static boolean portosDoMesmoEstado(Estado estadoPortoOrigem, Estado estadoEscala) {
+        return estadoPortoOrigem.getUf().equals(estadoEscala.getUf());
     }
 }
